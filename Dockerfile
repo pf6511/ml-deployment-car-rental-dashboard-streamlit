@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3
+FROM python:3.12-slim
 
 RUN apt-get update -y 
 RUN apt-get install nano unzip curl -y
@@ -14,12 +14,13 @@ USER user
 # PATH environment variable sets paths to look for installed binaries
 # We update it so that Linux knows where to look for binaries if we were to install them with "user".
 ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
+    PATH=/home/user/.local/bin:$PATH \
+    PORT=8501
 
 # We set working directory to $HOME/app (<=> /home/user/app)
 WORKDIR $HOME/app
 
-RUN curl -fsSL https://get.deta.dev/cli.sh | sh
+#RUN curl -fsSL https://get.deta.dev/cli.sh | sh
 
 # Copy all local files to /home/user/app with "user" as owner of these files
 # Always use --chown=user when using HUGGINGFACE to avoid permission errors
@@ -30,7 +31,7 @@ COPY requirements.txt /dependencies/requirements.txt
 RUN pip install -r /dependencies/requirements.txt
 
 # TEST comment
-COPY . $HOME/app
+#COPY . $HOME/app
 EXPOSE 8501
 
 CMD streamlit run --server.port $PORT --server.runOnSave true --server.headless true --logger.level debug getaround_dashboard_app.py

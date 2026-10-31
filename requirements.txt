@@ -2,8 +2,7 @@ pandas
 typing 
 pydantic
 streamlit
-boto3 
-gunicorn 
+boto3
 streamlit 
 scikit-learn 
 matplotlib 
